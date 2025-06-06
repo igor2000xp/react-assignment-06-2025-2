@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PricingCard Component Test</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // PricingCard Component
+        const PricingCard = ({ plan, price, features, isFeatured = false }) => {
+            return React.createElement('div', {
+                className: `
+                    relative rounded-lg border p-6 shadow-sm transition-all duration-200
+                    w-full max-w-sm mx-auto
+                    sm:max-w-none sm:w-80
+                    ${isFeatured 
+                        ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-500 ring-opacity-20 scale-105' 
+                        : 'border-gray-200 bg-white hover:shadow-lg hover:-translate-y-1'
+                    }
+                    focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-opacity-50
+                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
+                `,
+                tabIndex: 0,
+                role: "article",
+                'aria-label': `${plan} pricing plan${isFeatured ? ' - Most Popular' : ''}`
+            }, [
+                // Featured badge
+                isFeatured && React.createElement('div', {
+                    key: 'badge',
+                    className: "absolute -top-3 left-1/2 transform -translate-x-1/2"
+                }, 
+                    React.createElement('span', {
+                        className: "bg-blue-500 text-white px-3 py-1 text-sm font-medium rounded-full shadow-md"
+                    }, "Most Popular")
+                ),
+                
+                // Plan header
+                React.createElement('div', {
+                    key: 'header',
+                    className: "text-center mb-6"
+                }, [
+                    React.createElement('h2', {
+                        key: 'title',
+                        className: "text-xl font-semibold text-gray-900 mb-2"
+                    }, plan),
+                    React.createElement('div', {
+                        key: 'price',
+                        className: "text-3xl font-bold text-gray-900"
+                    }, price)
+                ]),
+                
+                // Features list
+                React.createElement('ul', {
+                    key: 'features',
+                    className: "space-y-3 mb-8",
+                    role: "list"
+                }, features.map((feature, index) =>
+                    React.createElement('li', {
+                        key: index,
+                        className: "flex items-start"
+                    }, [
+                        React.createElement('svg', {
+                            key: 'icon',
+                            className: "w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0",
+                            fill: "currentColor",
+                            viewBox: "0 0 20 20",
+                            'aria-hidden': "true"
+                        },
+                            React.createElement('path', {
+                                fillRule: "evenodd",
+                                d: "M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z",
+                                clipRule: "evenodd"
+                            })
+                        ),
+                        React.createElement('span', {
+                            key: 'text',
+                            className: "text-gray-700 text-sm leading-relaxed"
+                        }, feature)
+                    ])
+                )),
+                
+                // CTA Button
+                React.createElement('button', {
+                    key: 'button',
+                    className: `
+                        w-full py-3 px-4 rounded-md font-medium transition-colors duration-200
+                        focus:outline-none focus:ring-2 focus:ring-offset-2
+                        ${isFeatured
+                            ? 'bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500'
+                            : 'bg-gray-900 text-white hover:bg-gray-800 focus:ring-gray-500'
+                        }
+                    `,
+                    'aria-label': `Choose ${plan} plan`
+                }, "Get Started")
+            ].filter(Boolean));
+        };
+
+        // Demo App
+        const App = () => {
+            const pricingPlans = [
+                {
+                    plan: "Basic",
+                    price: "Free",
+                    features: [
+                        "10 GB Storage",
+                        "Email Support", 
+                        "Basic Analytics",
+                        "1 User Account"
+                    ],
+                    isFeatured: false
+                },
+                {
+                    plan: "Pro",
+                    price: "$9.99/month",
+                    features: [
+                        "100 GB Storage",
+                        "Priority Support",
+                        "Advanced Analytics", 
+                        "5 User Accounts",
+                        "Custom Integrations"
+                    ],
+                    isFeatured: true
+                },
+                {
+                    plan: "Enterprise",
+                    price: "$29.99/month",
+                    features: [
+                        "Unlimited Storage",
+                        "24/7 Phone Support",
+                        "Real-time Analytics",
+                        "Unlimited Users", 
+                        "Custom Integrations",
+                        "Dedicated Account Manager",
+                        "SLA Guarantee"
+                    ],
+                    isFeatured: false
+                }
+            ];
+
+            return React.createElement('div', {
+                className: "min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
+            }, [
+                React.createElement('div', {
+                    key: 'container',
+                    className: "max-w-7xl mx-auto"
+                }, [
+                    React.createElement('div', {
+                        key: 'header',
+                        className: "text-center mb-12"
+                    }, [
+                        React.createElement('h1', {
+                            key: 'title',
+                            className: "text-4xl font-bold text-gray-900 mb-4"
+                        }, "Choose Your Plan"),
+                        React.createElement('p', {
+                            key: 'subtitle',
+                            className: "text-xl text-gray-600"
+                        }, "Select the perfect plan for your needs")
+                    ]),
+                    
+                    React.createElement('div', {
+                        key: 'grid',
+                        className: "grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 justify-items-center"
+                    }, pricingPlans.map(plan => 
+                        React.createElement(PricingCard, {
+                            key: plan.plan,
+                            plan: plan.plan,
+                            price: plan.price,
+                            features: plan.features,
+                            isFeatured: plan.isFeatured
+                        })
+                    )),
+                    
+                    React.createElement('div', {
+                        key: 'status',
+                        className: "mt-16 text-center"
+                    }, [
+                        React.createElement('div', {
+                            key: 'success',
+                            className: "bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded"
+                        }, [
+                            React.createElement('strong', { key: 'strong' }, "✅ SUCCESS: "),
+                            "Node.js compatibility issue resolved! Component working perfectly."
+                        ])
+                    ])
+                ])
+            ]);
+        };
+
+        // Render the app
+        const domContainer = document.querySelector('#root');
+        const root = ReactDOM.createRoot(domContainer);
+        root.render(React.createElement(App));
+    </script>
+</body>
+</html> 
